@@ -41,6 +41,42 @@ class JikanMal extends Controller
         return response()->json($retorno);
     }
 
+
+    public function season($year = 2000, $season = 'winter') {
+        $jikan = new MalClient;
+        $season = $jikan->getSeasonal(
+            (new \Jikan\Request\Seasonal\SeasonalRequest(
+                $year,
+                $season
+            ))
+        );
+
+        $retorno = [];
+        foreach($season->getAnime() as $key => $value){
+            array_push($retorno, [
+                'airing_start' => $this->formatDate($value->getAiringStart(),'c'),
+                'continuing' => $value->isContinuing(),
+                'episodes' => $value->getEpisodes(),
+                'genres' => $this->getArrayGenres($value->getGenres()),
+                'imageUrl' => $value->getImageUrl(),
+                'kids' => $value->isKids(),
+                'licensors' => $value->getLicensors(),
+                'malId' => $value->getMalId(),
+                'members' => $value->getMembers(),
+                'producers' => $this->getArrayProducers($value->getProducers()),
+                'r18' => $value->isR18(),
+                'score' => $value->getScore(),
+                'synopsis' => $value->getSynopsis(),
+                'title' => $value->getTitle(),
+                'type' => $value->getType(),
+                'url' => $value->getUrl()
+            ]);
+        }
+
+        return response()->json($retorno);
+    }
+
+
     public function reviews(int $id, int $page = 1){
         $jikan = new MalClient;
 

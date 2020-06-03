@@ -28,6 +28,10 @@ Route::get(
     'mal/genres', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@genres')
 );
 
+Route::get('mal/season/{year}/{season}',array(
+    'middleware' => 'cors' ,'uses' => 'JikanMal@season')
+);
+
 Route::get(
     'mal/genres/{genreid}/{page?}', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@genre')
 );
@@ -36,9 +40,13 @@ Route::get(
     'mal/review/{id}/{page}', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@reviews')
 );
 
+
+
 Route::get('mal/{year}/{season}',array(
     'middleware' => 'cors' ,'uses' => 'JikanMal@index')
 );
+
+
 
 
 Route::resource('clientes', 'ClienteControlador');
