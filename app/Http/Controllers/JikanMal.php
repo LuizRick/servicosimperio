@@ -42,12 +42,13 @@ class JikanMal extends Controller
     }
 
 
-    public function season($year = 2000, $season = 'winter') {
+    public function season($year = 2000, $season = 'winter', bool $later = false) {
         $jikan = new MalClient;
         $season = $jikan->getSeasonal(
             (new \Jikan\Request\Seasonal\SeasonalRequest(
                 $year,
-                $season
+                $season,
+                $later
             ))
         );
 
