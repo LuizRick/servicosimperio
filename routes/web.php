@@ -28,6 +28,10 @@ Route::get(
     'mal/genres', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@genres')
 );
 
+Route::get(
+    'mal/anime/{id}', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@anime')
+);
+
 Route::get('mal/season/{year}/{season}',array(
     'middleware' => 'cors' ,'uses' => 'JikanMal@season')
 );

@@ -163,6 +163,71 @@ class JikanMal extends Controller
         );
     }
 
+    public function anime($id){
+        $jikan = new MalClient;
+        $anime = $jikan->getAnime(
+            (new \Jikan\Request\Anime\AnimeRequest($id))
+        );
+        $retorno = [
+            'malId' => $anime->getMalId(),
+            'url' => $anime->getUrl(),
+            'imageUrl' => $anime->getImageUrl(),
+            'trailerUrl' => $anime->getTrailerUrl(),
+            'title' => $anime->getTitle(),
+            'titleEnglish' => $anime->getTitleEnglish(),
+            'titleJapanese' => $anime->getTitleJapanese(),
+            'titleSynonyms' => $anime->getTitleSynonyms(),
+            'type' => $anime->getType(),
+            'source' => $anime->getSource(),
+            'episodes' => $anime->getEpisodes(),
+            'status' => $anime->getStatus(),
+            'airing' => $anime->isAiring(),
+            'aired' => $anime->getAired()->__toString(),
+            'duration' => $anime->getDuration(),
+            'rating' => $anime->getRating(),
+            'score' => $anime->getScore(),
+            'scoredBy' => $anime->getScoredBy(),
+            'rank' => $anime->getRank(),
+            'popularity' => $anime->getPopularity(),
+            'members' => $anime->getMembers(),
+            'favorites' => $anime->getFavorites(),
+            'synopsis' => $anime->getSynopsis(),
+            'background' => $anime->getBackground(),
+            'premiered' => $anime->getPremiered(),
+            'broadcast' => $anime->getBroadcast(),
+            'related' => $this->getAnimeRelated($anime->getRelated()),
+            'producers' => $this->getArrayProducers($anime->getProducers()),
+            'licensors' => $this->getAnimeLicensors($anime->getLicensors()),
+            'studios' => $this->getAnimeLicensors($anime->getStudios()),
+            'genres' => $this->getArrayGenres($anime->getGenres())
+        ];
+        return response()->json($retorno);
+    }
+
+    private function getAnimeLicensors($licensors){
+        $gens = [];
+        foreach($licensors as $key => $value){
+            array_push($gens, [
+                'name' => $value->getName(),
+                'url' => $value->getUrl()
+            ]);
+        }
+        return $gens;
+    }
+
+
+    private function getAnimeRelated($related){
+        $r = [];
+        foreach($related as $key => $adaptations){
+            foreach($adaptations as $akey => $mal){
+                array_push($r, [
+                    'name' => $mal->getName(),
+                    'url' => $mal->getUrl()
+                ]);
+            }
+        }
+        return $r;
+    }
 
 
     private function getArrayGenres($genres) : array{
