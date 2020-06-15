@@ -32,6 +32,10 @@ Route::get(
     'mal/anime/{id}', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@anime')
 );
 
+Route::get(
+    'mal/suggestions/{page?}', array( 'middleware' => 'cors' ,'uses' => 'JikanMal@suggestions')
+);
+
 Route::get('mal/season/{year}/{season}/{later?}',array(
     'middleware' => 'cors' ,'uses' => 'JikanMal@season')
 );

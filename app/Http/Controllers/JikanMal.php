@@ -205,6 +205,39 @@ class JikanMal extends Controller
         return response()->json($retorno);
     }
 
+    public function suggestions(Request $request, int $page = 1){
+        $query = $request->query('q');
+        $jikan = new MalClient;
+        $response = $jikan->getAnimeSearch(
+             (new \Jikan\Request\Search\AnimeSearchRequest($query, $page))
+        );
+
+        $retorno = [
+            'results' => [],
+            'lastPage' => $response->getLastPage(),
+        ];
+
+        foreach($response->getResults() as $key => $anime){
+            array_push($retorno['results'], array(
+                'malId' => $anime->getMalId(),
+                'url' => $anime->getUrl(),
+                'imageUrl' => $anime->getImageUrl(),
+                'title' => $anime->getTitle(),
+                'airing' => $anime->isAiring(),
+                'synopsis' => $anime->getSynopsis(),
+                'type' => $anime->getType(),
+                'episodes' => $anime->getEpisodes(),
+                'score' => $anime->getScore(),
+                'startDate' => $this->formatDate($anime->getStartDate(), 'c'),
+                'endDate' => $this->formatDate($anime->getEndDate(), 'c'),
+                'members' => $anime->getMembers(),
+                'rated' => $anime->getRated()
+            ));
+        }
+
+        return response()->json($retorno);
+    }
+
     private function getAnimeLicensors($licensors){
         $gens = [];
         foreach($licensors as $key => $value){
